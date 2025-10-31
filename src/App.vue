@@ -5,9 +5,11 @@
       <div class="h-full w-full bg-[radial-gradient(circle_at_bottom_right,_rgba(236,72,153,0.12),_transparent_50%)]"></div>
     </div>
 
-    <div class="mx-auto flex max-w-[1400px] flex-col md:grid md:min-h-screen md:grid-cols-[320px_1fr]">
+    <div
+      class="mx-auto flex max-w-[1400px] flex-col md:grid md:min-h-screen md:grid-cols-[320px_1fr] md:grid-rows-[auto_1fr]"
+    >
       <aside
-        class="border-b border-slate-800/40 bg-slate-950/95 px-6 py-8 text-slate-200 backdrop-blur md:sticky md:top-0 md:flex md:h-screen md:flex-col md:gap-10 md:border-b-0 md:border-r md:px-10"
+        class="border-b border-slate-800/40 bg-slate-950/95 px-6 py-8 text-slate-200 backdrop-blur md:sticky md:top-0 md:flex md:h-screen md:flex-col md:gap-10 md:border-b-0 md:border-r md:px-10 md:row-span-2"
       >
         <div class="space-y-2">
           <p class="text-xs font-semibold uppercase tracking-[0.4em] text-slate-500">Prosync</p>
@@ -112,7 +114,65 @@
         </section>
       </aside>
 
-      <main v-if="activeComponent" class="px-6 py-10 md:px-12 md:py-12">
+      <header
+        class="z-10 border-b border-slate-800/40 bg-slate-950/80 px-6 py-5 text-slate-200 backdrop-blur md:sticky md:top-0 md:col-start-2 md:row-start-1 md:border-l md:px-12"
+      >
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+            <button
+              type="button"
+              class="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold tracking-tight text-white shadow-[0_12px_30px_rgba(15,23,42,0.35)] transition hover:bg-white/10"
+            >
+              <span class="h-2 w-2 rounded-full bg-prosync-ocean-400"></span>
+              Select project
+            </button>
+
+            <nav class="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.35em] text-slate-400">
+              <span>Home</span>
+              <span class="h-1 w-1 rounded-full bg-slate-600/70"></span>
+              <span>Components</span>
+              <span class="h-1 w-1 rounded-full bg-slate-600/70"></span>
+              <span class="text-white">{{ activeComponent?.name ?? 'Overview' }}</span>
+            </nav>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200 transition hover:bg-white/10"
+              >
+                All
+              </button>
+              <button
+                type="button"
+                class="rounded-full border border-transparent bg-prosync-coral-500/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white shadow-[0_10px_25px_rgba(236,72,153,0.35)] transition hover:bg-prosync-coral-500"
+              >
+                Review
+              </button>
+              <button
+                type="button"
+                class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-slate-200 transition hover:bg-white/10"
+              >
+                Build-ready
+              </button>
+            </div>
+
+            <div class="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-left shadow-[0_12px_30px_rgba(15,23,42,0.35)]">
+              <div class="h-10 w-10 rounded-full bg-gradient-to-br from-prosync-ocean-500 to-prosync-coral-500"></div>
+              <div>
+                <p class="text-sm font-semibold tracking-tight text-white">Jordan Wells</p>
+                <p class="text-[11px] uppercase tracking-[0.35em] text-slate-400">Product design</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main
+        v-if="activeComponent"
+        class="px-6 pb-10 pt-24 md:col-start-2 md:row-start-2 md:px-12 md:pb-12 md:pt-16"
+      >
         <header class="space-y-4 border-b border-slate-200/40 pb-8">
           <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Component standard</p>
           <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
