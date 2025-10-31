@@ -1,20 +1,23 @@
 <template>
-  <label class="ds-input" :class="[`ds-input--${state}`]" :for="id">
-    <span class="ds-input__label">{{ label }}</span>
+  <label class="flex flex-col gap-2 text-sm font-medium text-slate-700" :for="id">
+    <span class="tracking-tight text-slate-600">{{ label }}</span>
     <input
       :id="id"
       :placeholder="placeholder"
-      class="ds-input__field"
+      class="rounded-2xl border bg-white/95 px-4 py-3 text-base text-slate-900 shadow-sm transition focus:outline-none"
+      :class="inputClasses"
       type="text"
       :aria-invalid="state === 'error'"
     />
-    <p v-if="helper" class="ds-input__helper" :class="{ 'ds-input__helper--error': state === 'error' }">
+    <p v-if="helper" class="text-xs" :class="helperClasses">
       {{ helper }}
     </p>
   </label>
 </template>
 
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   id: {
     type: String,
@@ -37,53 +40,20 @@ const props = defineProps({
     default: 'default'
   }
 });
+
+const fieldStateClasses = {
+  default: 'border-slate-200 focus:border-prosync-ocean-500 focus:ring-4 focus:ring-prosync-ocean-500/15',
+  success: 'border-emerald-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-400/20',
+  error: 'border-rose-400 focus:border-rose-500 focus:ring-4 focus:ring-rose-400/20'
+};
+
+const helperStateClasses = {
+  default: 'text-slate-500',
+  success: 'text-emerald-600',
+  error: 'text-rose-600'
+};
+
+const inputClasses = computed(() => fieldStateClasses[props.state] ?? fieldStateClasses.default);
+
+const helperClasses = computed(() => helperStateClasses[props.state] ?? helperStateClasses.default);
 </script>
-
-<style scoped>
-.ds-input {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #1f2937;
-}
-
-.ds-input__label {
-  letter-spacing: 0.01em;
-}
-
-.ds-input__field {
-  border-radius: 12px;
-  border: 1.5px solid #d1d5f0;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  font-family: inherit;
-  background: #ffffff;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.ds-input__field:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
-}
-
-.ds-input--success .ds-input__field {
-  border-color: #059669;
-}
-
-.ds-input--error .ds-input__field {
-  border-color: #dc2626;
-}
-
-.ds-input__helper {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #4b5563;
-}
-
-.ds-input__helper--error {
-  color: #b91c1c;
-}
-</style>
