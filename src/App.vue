@@ -15,25 +15,30 @@
           <p class="text-sm text-slate-400">Component standards & implementation guidance</p>
         </div>
 
-        <nav class="space-y-2">
-          <button
-            v-for="component in components"
-            :key="component.id"
-            type="button"
-            class="group flex w-full items-center justify-between rounded-2xl border border-transparent bg-white/5 px-4 py-3 text-left transition hover:bg-white/10"
-            :class="{
-              'border-white/20 bg-white/10 text-white shadow-[0_12px_30px_rgba(15,23,42,0.35)]': component.id === selectedId,
-              'text-slate-300': component.id !== selectedId
-            }"
-            @click="selectedId = component.id"
-          >
-            <span class="text-sm font-semibold tracking-tight">{{ component.name }}</span>
-            <small
-              class="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.25em] text-slate-300"
-            >
-              {{ component.status }}
-            </small>
-          </button>
+        <nav class="space-y-6">
+          <section v-for="section in navigationSections" :key="section.title" class="space-y-3">
+            <p class="text-[11px] font-semibold uppercase tracking-[0.45em] text-slate-500">{{ section.title }}</p>
+            <div class="space-y-2">
+              <button
+                v-for="item in section.items"
+                :key="item.id"
+                type="button"
+                class="group flex w-full items-center justify-between rounded-2xl border border-transparent bg-white/5 px-4 py-3 text-left transition hover:bg-white/10"
+                :class="{
+                  'border-white/20 bg-white/10 text-white shadow-[0_12px_30px_rgba(15,23,42,0.35)]': item.id === selectedId,
+                  'text-slate-300': item.id !== selectedId
+                }"
+                @click="selectedId = item.id"
+              >
+                <span class="text-sm font-semibold tracking-tight">{{ item.label }}</span>
+                <small
+                  class="rounded-full border border-white/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.25em] text-slate-300"
+                >
+                  {{ item.status }}
+                </small>
+              </button>
+            </div>
+          </section>
         </nav>
 
         <section class="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.35)]">
@@ -127,37 +132,40 @@
         <section class="mt-10 space-y-6">
           <article class="rounded-3xl border border-slate-200/60 bg-white/90 p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-slate-900">Usage guidelines</h3>
-            <ul class="mt-4 space-y-2 text-sm text-slate-600">
+            <ul v-if="activeComponent.usage.length" class="mt-4 space-y-2 text-sm text-slate-600">
               <li v-for="item in activeComponent.usage" :key="item" class="flex gap-3">
                 <span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-prosync-ocean-500"></span>
                 <span>{{ item }}</span>
               </li>
             </ul>
+            <p v-else class="mt-4 text-sm text-slate-500">Usage guidance is being prepared for this entry.</p>
           </article>
 
           <article class="rounded-3xl border border-slate-200/60 bg-white/90 p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-slate-900">Content standards</h3>
-            <ul class="mt-4 space-y-2 text-sm text-slate-600">
+            <ul v-if="activeComponent.contentGuidelines.length" class="mt-4 space-y-2 text-sm text-slate-600">
               <li v-for="item in activeComponent.contentGuidelines" :key="item" class="flex gap-3">
                 <span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-prosync-coral-500"></span>
                 <span>{{ item }}</span>
               </li>
             </ul>
+            <p v-else class="mt-4 text-sm text-slate-500">Editorial standards are coming soon.</p>
           </article>
 
           <article class="rounded-3xl border border-slate-200/60 bg-white/90 p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-slate-900">Accessibility checklist</h3>
-            <ul class="mt-4 space-y-2 text-sm text-slate-600">
+            <ul v-if="activeComponent.accessibility.length" class="mt-4 space-y-2 text-sm text-slate-600">
               <li v-for="item in activeComponent.accessibility" :key="item" class="flex gap-3">
                 <span class="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-slate-400"></span>
                 <span>{{ item }}</span>
               </li>
             </ul>
+            <p v-else class="mt-4 text-sm text-slate-500">Accessibility considerations will be documented shortly.</p>
           </article>
 
           <article class="rounded-3xl border border-slate-200/60 bg-white/90 p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-slate-900">Component API</h3>
-            <div class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
+            <div v-if="activeComponent.props.length" class="mt-4 overflow-hidden rounded-2xl border border-slate-200">
               <table class="min-w-full divide-y divide-slate-200 text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                   <tr>
@@ -177,11 +185,12 @@
                 </tbody>
               </table>
             </div>
+            <p v-else class="mt-4 text-sm text-slate-500">API surface will be defined as the component stabilizes.</p>
           </article>
 
           <article class="rounded-3xl border border-slate-200/60 bg-white/90 p-6 shadow-sm">
             <h3 class="text-lg font-semibold text-slate-900">Token references</h3>
-            <div class="mt-4 grid gap-4 md:grid-cols-2">
+            <div v-if="activeComponent.tokens.length" class="mt-4 grid gap-4 md:grid-cols-2">
               <article v-for="token in activeComponent.tokens" :key="token.token" class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
                 <header class="flex items-center justify-between">
                   <h4 class="text-sm font-semibold text-slate-900">{{ token.token }}</h4>
@@ -190,9 +199,11 @@
                 <p class="mt-2 text-sm text-slate-600">{{ token.description }}</p>
               </article>
             </div>
+            <p v-else class="mt-4 text-sm text-slate-500">Token mappings will be published as they become available.</p>
           </article>
 
           <component-preview
+            v-if="activeComponent.preview"
             class="rounded-3xl border border-slate-200/60 bg-white/90"
             :component-name="activeComponent.preview.component"
             :title="`${activeComponent.name} previews`"
@@ -200,6 +211,9 @@
             :examples="activeComponent.preview.examples"
             :component-map="componentMap"
           />
+          <article v-else class="rounded-3xl border border-dashed border-slate-300 bg-white/70 p-6 text-sm text-slate-500">
+            Interactive previews will be added for this pattern as implementation guidance matures.
+          </article>
         </section>
       </main>
     </div>
@@ -214,8 +228,10 @@ import DsCard from './components/DsCard.vue';
 import DsInput from './components/DsInput.vue';
 import { components } from './data/components';
 import { colorTokens, typographyTokens, iconTokens, radiusTokens } from './data/designTokens';
+import { navigationSections } from './data/navigation';
 
-const selectedId = ref(components[0]?.id ?? '');
+const firstSection = navigationSections[0];
+const selectedId = ref(firstSection?.items?.[0]?.id ?? '');
 
 const componentMap = {
   DsButton,
@@ -223,7 +239,56 @@ const componentMap = {
   DsInput
 };
 
-const activeComponent = computed(() => components.find((item) => item.id === selectedId.value));
+const activeNavItem = computed(() => {
+  for (const section of navigationSections) {
+    const match = section.items.find((item) => item.id === selectedId.value);
+    if (match) {
+      return match;
+    }
+  }
+
+  return null;
+});
+
+const activeComponent = computed(() => {
+  const navItem = activeNavItem.value;
+
+  if (!navItem) {
+    return null;
+  }
+
+  const detailedComponent = components.find((item) => item.id === navItem.id);
+  const details = navItem.details ?? {};
+
+  const fallbackDescription = `Documentation for ${navItem.label} is coming soon.`;
+
+  if (detailedComponent) {
+    return {
+      ...detailedComponent,
+      status: detailedComponent.status ?? navItem.status ?? 'Planned',
+      description: detailedComponent.description ?? details.description ?? fallbackDescription,
+      usage: detailedComponent.usage ?? details.usage ?? [],
+      contentGuidelines: detailedComponent.contentGuidelines ?? details.contentGuidelines ?? [],
+      accessibility: detailedComponent.accessibility ?? details.accessibility ?? [],
+      tokens: detailedComponent.tokens ?? details.tokens ?? [],
+      props: detailedComponent.props ?? details.props ?? [],
+      preview: detailedComponent.preview ?? details.preview ?? null
+    };
+  }
+
+  return {
+    id: navItem.id,
+    name: navItem.label,
+    status: navItem.status ?? 'Planned',
+    description: details.description ?? fallbackDescription,
+    usage: details.usage ?? [],
+    contentGuidelines: details.contentGuidelines ?? [],
+    accessibility: details.accessibility ?? [],
+    tokens: details.tokens ?? [],
+    props: details.props ?? [],
+    preview: details.preview ?? null
+  };
+});
 
 const statusClasses = computed(() => {
   if (!activeComponent.value) {
@@ -233,7 +298,9 @@ const statusClasses = computed(() => {
   const styles = {
     Stable: 'bg-emerald-500/10 text-emerald-600 ring-1 ring-inset ring-emerald-500/40',
     Beta: 'bg-amber-500/10 text-amber-600 ring-1 ring-inset ring-amber-500/30',
-    Draft: 'bg-slate-500/10 text-slate-600 ring-1 ring-inset ring-slate-400/30'
+    Draft: 'bg-slate-500/10 text-slate-600 ring-1 ring-inset ring-slate-400/30',
+    Reference: 'bg-sky-500/10 text-sky-600 ring-1 ring-inset ring-sky-400/40',
+    Planned: 'bg-purple-500/10 text-purple-600 ring-1 ring-inset ring-purple-400/40'
   };
 
   return styles[activeComponent.value.status] ?? 'bg-slate-500/10 text-slate-600 ring-1 ring-inset ring-slate-400/30';
