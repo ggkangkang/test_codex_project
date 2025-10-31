@@ -1,22 +1,21 @@
-:root {
-  color-scheme: light;
-  font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-  background-color: #f5f7fb;
-  color: #111827;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  :root {
+    color-scheme: light;
+  }
 
-body {
-  margin: 0;
-}
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
 
-a {
-  color: inherit;
-}
+  a {
+    @apply text-inherit no-underline;
+  }
 
-code {
-  font-family: 'Source Code Pro', 'Consolas', 'Courier New', monospace;
+  code {
+    @apply font-mono;
+  }
 }
